@@ -3,3 +3,8 @@ Library
 Logs
 UserSettings
 .vsconfig
+obj
+Temp
+MyGameList.sln
+.vs
+Assembly-CSharp.csproj
