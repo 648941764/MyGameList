@@ -12,8 +12,9 @@ public abstract class SelectionBase
 
     public abstract string Title { get; }
     public virtual Color TitleColor => new Color(0f, 0f, 0f);
+    public UnityAction OnSelectedAction { get; set; }
 
-    protected abstract void OnSelected();
+    protected virtual void OnSelected() { OnSelectedAction?.Invoke(); }
     protected abstract void AttachComponents();
     protected abstract void InitUIEvent();
     protected virtual void InitUIData() { }
