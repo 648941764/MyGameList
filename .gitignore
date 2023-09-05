@@ -8,3 +8,5 @@ Temp
 MyGameList.sln
 .vs
 Assembly-CSharp.csproj
+*.csproj
+*.sln

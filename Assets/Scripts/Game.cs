@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SmartGame : MonoBehaviour
+public abstract class Game : MonoBehaviour
 {
     protected int _point;
     protected int _maxPoint;
@@ -27,7 +27,7 @@ public abstract class SmartGame : MonoBehaviour
 
     */
 }
-public class FlappyBird : SmartGame
+public class FlappyBird : Game
 {
     protected override void CalcPoint()
     {
