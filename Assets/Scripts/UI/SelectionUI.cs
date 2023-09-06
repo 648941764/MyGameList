@@ -10,7 +10,7 @@ public abstract class SelectionUI
     protected Button selectionButton;
 
     protected abstract void AttachComponents();
-    protected virtual void InitUIEvent() { selectionButton.onClick.AddListener(OnSelectedHandle); }
+    protected virtual void RegisterUIEvents() { selectionButton.onClick.AddListener(OnSelectedHandle); }
     protected virtual void InitUIData() { }
 
     public void SetParent(Transform parent)
@@ -41,7 +41,7 @@ public abstract class SelectionUI
         }
         selectionObject = Object.Instantiate(prefab).transform;
         AttachComponents();
-        InitUIEvent();
+        RegisterUIEvents();
         InitUIData();
         return this;
     }
