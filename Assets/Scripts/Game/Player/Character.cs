@@ -1,16 +1,8 @@
 using UnityEngine;
 
-public abstract class Character
+public abstract class Character : MonoBehaviour
 {
-    protected Transform character;
-    public virtual void Attach(Transform characterTransform)
-    {
-        character = characterTransform;
-        AttachComponents();
-        RegisterEvents();
-    }
-
-    public virtual void AttachComponents() { }
+    [SerializeField] protected Transform character;
     public virtual void RegisterEvents() { }
     public abstract void PlayerUpdate(float dt);
 }

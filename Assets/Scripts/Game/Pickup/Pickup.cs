@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pickup : Game
 {
-    protected override void Instantiate(GameData gameData)
+    protected override void StartGame(GameData gameData)
     {
     }
 
