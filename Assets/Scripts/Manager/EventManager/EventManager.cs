@@ -32,9 +32,9 @@ public sealed class EventManager : Singleton<EventManager>
         r_Handlers.Remove(handler);
     }
 
-    public void Broadcast(EventParam param)
+    public void Broadcast(EventParam param, bool returnToPool = true)
     {
-        r_Handler.Invoke(param);
-        ParamPool.Release(param);
+        r_Handler?.Invoke(param);
+        if (returnToPool) { ParamPool.Release(param); }
     }
 }

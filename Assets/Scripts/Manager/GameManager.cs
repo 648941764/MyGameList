@@ -1,8 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    protected override void Start()
+    {
+        InputManager.Instance.ToString();
+        EventManager.Instance.AddListener(_ =>
+        {
+            Debug.Log(_.Get<KeyCode>().ToString());
+        });
+    }
+
     protected override void Update()
     {
         UpdateTime();
