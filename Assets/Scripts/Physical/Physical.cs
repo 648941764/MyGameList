@@ -1,0 +1,45 @@
+using UnityEngine;
+using Excalibur.Geometric;
+
+namespace Excalibur.Physical
+{
+    public class PhysicalObject
+    {
+        private Transform _transform;
+        private IGeometric _shape;
+
+        public PhysicalObject(Transform transform, IGeometric shape)
+        {
+            (_transform, _shape) = (transform, shape);
+            _shape.UpdateCenter(_transform.position);
+        }
+
+        public Vector3 position
+        {
+            get => _transform.position;
+            set { _transform.position = value; _shape.UpdateCenter(value); }
+        }
+
+        public Quaternion rotation
+        {
+            get => _transform.rotation;
+            set { _transform.rotation = value; _shape.UpdateRotation(value); }
+        }
+
+        public Vector3 localPosition
+        {
+            get => _transform.localPosition;
+            set { _transform.localPosition = value; _shape.UpdateCenter(value); }
+        }
+
+        public bool HitPoint(Vector2 point)
+        {
+            return _shape.ContainsPoint2D(point);
+        }
+
+        public bool HitPoint(Vector3 point)
+        {
+            return _shape.ContainsPoint3D(point);
+        }
+    }
+}

@@ -15,8 +15,10 @@ public sealed class EventManager : Singleton<EventManager>
         if (r_Handlers.Contains(handler))
         {
             UnityEngine.Debug.LogWarningFormat("事件添加：<color=#FFFFFF>{0}</color>，重复!", handler.GetMethodInfo().Name);
+            return;
         }
         r_Handler += handler;
+        r_Handlers.Add(handler);
     }
 
     public void RemoveListener(EventHandler handler)
@@ -24,12 +26,15 @@ public sealed class EventManager : Singleton<EventManager>
         if (!r_Handlers.Contains(handler))
         {
             UnityEngine.Debug.LogWarningFormat("事件不存在：<color=#FFFFFF>{0}</color>，不存在!", handler.GetMethodInfo().Name);
+            return;
         }
         r_Handler -= handler;
+        r_Handlers.Remove(handler);
     }
 
     public void Broadcast(EventParam param)
     {
         r_Handler.Invoke(param);
+        ParamPool.Release(param);
     }
 }
