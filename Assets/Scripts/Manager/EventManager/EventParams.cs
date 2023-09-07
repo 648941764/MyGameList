@@ -10,6 +10,8 @@ public sealed partial class EventParam
     public EventParam() { }
     public EventParam(EventName eventName) => this.eventName = eventName;
 
+    public int ParamCount => r_Parmas.Count;
+
     public T Get<T>()
     {
         //Any any = r_Parmas.Dequeue();
