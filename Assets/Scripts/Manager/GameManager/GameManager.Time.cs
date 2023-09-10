@@ -48,7 +48,7 @@ public partial class GameManager
             {
                 foreach (Timer timer in _scheduleList.Values)
                 {
-                    if (timer.delay == 0)
+                    if (timer.delayRemain == 0)
                     {
                         if (timer.onSchedule != null && timer.elapsed % timer.interval == 0)
                         {
@@ -61,14 +61,21 @@ public partial class GameManager
                             {
                                 _delList.Add(timer);
                             }
-                            timer.elapsed = 0;
+                            else
+                            {
+                                timer.elapsed = 0;
+                                if (!timer.delayOnce)
+                                {
+                                    timer.delayRemain = timer.delay;
+                                }
+                            }
                             continue;
                         }
                         timer.elapsed += ONE_SEC;
                     }
                     else
                     {
-                        timer.delay -= ONE_SEC;
+                        timer.delayRemain -= ONE_SEC;
                     }
                 }
             }
@@ -81,7 +88,7 @@ public partial class GameManager
     /// <param name="repeat">重复次数</param>
     /// <param name="delay">推迟时间（毫秒）</param>
     /// <param name="interval">更新间隔（毫秒）</param>
-    public int Schedule(int duration, Action onComplete = default, Action<int> onSchedule = default, int repeat = 1, int interval = 1, int delay = 0)
+    public int Schedule(int duration, Action onComplete = default, Action<int> onSchedule = default, int repeat = 1, int interval = 1, int delay = 0, bool delayOnce = true)
     {
         Timer timer = TimerPool.GetTimer();
         timer.beginAt = _gameTime;
@@ -89,9 +96,11 @@ public partial class GameManager
         timer.finishAt = _gameTime + duration;
         timer.onComplete = onComplete;
         timer.onSchedule = onSchedule;
+        timer.interval = interval;
         timer.repeat = repeat;
         timer.delay = delay;
-        timer.interval = interval;
+        timer.delayRemain = delay;
+        timer.delayOnce = delayOnce;
         _addList.Add(timer);
         return timer.GetHashCode();
     }
@@ -118,7 +127,8 @@ public partial class GameManager
 
     private class Timer
     {
-        public int beginAt, finishAt, elapsed, duration, repeat, interval, delay;
+        public int beginAt, finishAt, elapsed, duration, repeat, interval, delayRemain, delay;
+        public bool delayOnce;
         public Action<int> onSchedule;
         public Action onComplete;
 
