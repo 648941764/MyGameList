@@ -3,11 +3,20 @@ using System;
 
 public class ObjectPool<T> where T : new()
 {
-    private readonly uint r_MaxCount;
-    private readonly Action<T> r_OnGet, r_OnRelease;
+    private readonly int r_MaxCount;
+    private readonly Action<T> r_OnGet, r_OnRelease, r_OnOutOfBound;
     private readonly Stack<T> r_Pool = new Stack<T>();
 
-    public ObjectPool(uint maxCount = 512, Action<T> onGet = default, Action<T> onRelease = default) => (r_MaxCount, r_OnGet, r_OnRelease) = (maxCount, onGet, onRelease);
+    public int currentCount => r_Pool.Count;
+    public int maxCount => r_MaxCount;
+
+    public ObjectPool(
+        int maxCount = 512,
+        Action<T> onGet = default,
+        Action<T> onRelease = default,
+        Action<T> onOutOfBound = default
+        ) 
+        => (r_MaxCount, r_OnGet, r_OnRelease, r_OnOutOfBound) = (maxCount, onGet, onRelease, onOutOfBound);
 
     public T Get()
     {
@@ -18,7 +27,11 @@ public class ObjectPool<T> where T : new()
 
     public void Release(T @object)
     {
-        if (r_Pool.Count == r_MaxCount) { return; }
+        if (r_Pool.Count == r_MaxCount) 
+        {
+            r_OnOutOfBound?.Invoke(@object);
+            return; 
+        }
         r_OnRelease?.Invoke(@object);
         r_Pool.Push(@object);
     }

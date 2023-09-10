@@ -1,16 +1,10 @@
 using System;
-using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace Excalibur.Geometric
+namespace Excalibur.Physical
 {
-    /*
-     * 2D的Box数值放在x、y位置，
-     * 
-     */
-
-    using BoxShape = Structs.Box;
+    using BoxShape = Geometry.Box;
 
     public class Box : IGeometric
     {
@@ -18,21 +12,14 @@ namespace Excalibur.Geometric
 
         public BoxShape _box;
 
-        public Box(Vector3 center, Vector3 extents)
-        {
-            if (extents.x <= 0f || extents.y <= 0f || extents.z < 0f)
-            {
-                throw new System.InvalidOperationException("Box constructor, extents can not be negative");
-            }
-
-            _box.center = center;
-            _box.extents = extents;
-            _box.rotation = Quaternion.identity;
-        }
-
         public void UpdateCenter(Vector3 center)
         {
             _box.center = center;
+        }
+
+        public void UpdateExtents(Vector3 extents)
+        {
+            _box.extents = extents;
         }
 
         public void UpdateRotation(Quaternion rotation)

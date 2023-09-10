@@ -1,4 +1,3 @@
-using Excalibur.Geometric;
 using Excalibur.Physical;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ public sealed class PickupPlayer : Character, IPhysicalObject
 
     protected override void Awake()
     {
-        physicalComp = new PhysicalComponent(transform, new Box(transform.position, transform.localScale));
+        physicalComp = new PhysicalComponent(transform, new Box());
 
         EnrollEvents(_UpdateMove);
     }

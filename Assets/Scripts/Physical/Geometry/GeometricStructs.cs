@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Excalibur.Geometric.Structs
+namespace Excalibur.Physical.Geometry
 {
     public struct Box
     {

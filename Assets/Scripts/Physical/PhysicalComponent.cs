@@ -1,5 +1,4 @@
 using UnityEngine;
-using Excalibur.Geometric;
 
 namespace Excalibur.Physical
 {
@@ -14,6 +13,8 @@ namespace Excalibur.Physical
         {
             (_transform, _shape) = (transform, shape);
             _shape.UpdateCenter(_transform.position);
+            _shape.UpdateExtents(_transform.localScale);
+            _shape.UpdateRotation(Quaternion.identity);
         }
 
         public Vector3 position

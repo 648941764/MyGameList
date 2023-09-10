@@ -6,6 +6,12 @@ public partial class GameManager : MonoSingleton<GameManager>
 {
     float dt;
 
+    protected override void Start()
+    {
+        base.Start();
+        ModelManager.Instance.InstantiateModel();
+    }
+
     protected override void Update()
     {
         GameUpdate();

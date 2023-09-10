@@ -2,11 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Game : MonoBehaviour
+public abstract class Game : GameFlow
 {
-    protected abstract void StartGame(GameModel gameData);
-
-    /// <summary> 游戏逻辑实现接口 /// </summary>
-    /// <param name="dt">Time.deltaTime</param>
-    protected abstract void GameUpdate(float dt);
 }
