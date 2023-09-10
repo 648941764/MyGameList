@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Game : MonoBehaviour
 {
-    protected abstract void StartGame(GameData gameData);
+    protected abstract void StartGame(GameModel gameData);
 
     /// <summary> 游戏逻辑实现接口 /// </summary>
     /// <param name="dt">Time.deltaTime</param>

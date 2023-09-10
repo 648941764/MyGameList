@@ -14,15 +14,11 @@ public sealed partial class EventParam
 
     public T Get<T>()
     {
-        //Any any = r_Parmas.Dequeue();
-        //_ReleaseAny(any);
         return (T)r_Parmas.Dequeue();
     }
 
     public EventParam Push<T>(T param)
     {
-        //Any any = _GetAny();
-        //any.param = param;
         r_Parmas.Enqueue(param);
         return this;
     }
@@ -33,22 +29,6 @@ public sealed partial class EventParam
         r_Parmas.Clear();
     }
 }
-
-//public sealed partial class EventParam
-//{
-//    public struct Any
-//    {
-//        public dynamic param;
-//        public Any(dynamic param) => this.param = param;
-//    }
-//}
-
-//public sealed partial class EventParam
-//{
-//    private static readonly ObjectPool<Any> sr_Pool = new ObjectPool<Any>();
-//    private Any _GetAny() => sr_Pool.Get();
-//    private void _ReleaseAny(Any any) => sr_Pool.Release(any);
-//}
 
 public static class ParamPool
 {

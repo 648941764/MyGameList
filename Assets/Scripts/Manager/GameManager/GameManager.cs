@@ -2,11 +2,20 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class GameManager : MonoSingleton<GameManager>
+public partial class GameManager : MonoSingleton<GameManager>
 {
+    float dt;
+
     protected override void Update()
     {
-        UpdateTime();
+        GameUpdate();
+    }
+
+    private void GameUpdate()
+    {
+        dt = Time.deltaTime;
+        _UpdateInput();
+        CharacterManager.Instance.CharacterUpdate(dt);
     }
 
     const float ONE_MILLI_SEC = 0.001f;
@@ -16,7 +25,7 @@ public class GameManager : MonoSingleton<GameManager>
     private int _gameTime;
     private float _elapsed;
 
-    void UpdateTime()
+    private void _UpdateTime()
     {
         _elapsed += Time.deltaTime;
         while (_elapsed >= ONE_MILLI_SEC) // 1∫¡√Î
@@ -24,5 +33,10 @@ public class GameManager : MonoSingleton<GameManager>
             _elapsed -= ONE_MILLI_SEC;
             _gameTime += ONE_SEC;
         }
+    }
+
+    private void _Broadcast(EventParam param)
+    {
+        EventManager.Instance.Broadcast(param, false);
     }
 }

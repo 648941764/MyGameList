@@ -21,7 +21,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private void Awake() { _instance = this as T; DontDestroyOnLoad(_instance); OnAwake(); }
+    protected virtual void Awake() { _instance = this as T; DontDestroyOnLoad(_instance); OnAwake(); }
     protected virtual void OnAwake() { }
     protected virtual void Start() { }
     protected virtual void Update() { }

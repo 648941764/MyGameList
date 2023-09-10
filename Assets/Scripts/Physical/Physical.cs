@@ -3,12 +3,14 @@ using Excalibur.Geometric;
 
 namespace Excalibur.Physical
 {
-    public class PhysicalObject
+    public class PhysicalComponent
     {
         private Transform _transform;
         private IGeometric _shape;
 
-        public PhysicalObject(Transform transform, IGeometric shape)
+        public string tag = string.Empty;
+
+        public PhysicalComponent(Transform transform, IGeometric shape)
         {
             (_transform, _shape) = (transform, shape);
             _shape.UpdateCenter(_transform.position);
