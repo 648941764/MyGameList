@@ -33,7 +33,7 @@ public class PickupBucket : Character, IPhysicalObject
         _moveEquation.b = pos.x;
         _UpdateSpeed();
 
-        _throwAppleTimerIdentifier = GameManager.Instance.Schedule(_model.ThrowInterval, () => _ThrowApple());
+        _ScheduleThrow();
     }
 
     public override void GameUpdate(float dt)
@@ -74,10 +74,15 @@ public class PickupBucket : Character, IPhysicalObject
         {
             case EventName.PickupGameStageChange:
                 {
-                    GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
-                    _throwAppleTimerIdentifier = GameManager.Instance.Schedule(_model.ThrowInterval, _ThrowApple);
+                    _ScheduleThrow();
                 }
                 break;
         }
+    }
+
+    private void _ScheduleThrow()
+    {
+        GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
+        _throwAppleTimerIdentifier = GameManager.Instance.Schedule(_model.ThrowInterval, _ThrowApple, default, 0);
     }
 }

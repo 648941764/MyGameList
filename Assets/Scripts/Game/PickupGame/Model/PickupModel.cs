@@ -14,7 +14,7 @@ public class PickupModel : GameModel
     public int CurrentScore => _currentScore;
     public int HighestScore => _highestScore;
     public float BucketSpeed => _bucketData.Speed;
-    public float ThrowInterval => _bucketData.Interval;
+    public int ThrowInterval => _bucketData.Interval;
 
     public override string GetSceneName()
     {

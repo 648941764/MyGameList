@@ -48,6 +48,7 @@ public partial class GameManager
             {
                 foreach (Timer timer in _scheduleList.Values)
                 {
+                    if (timer.isCompleted) { continue; }
                     if (timer.delayRemain == 0)
                     {
                         if (timer.onSchedule != null && timer.elapsed % timer.interval == 0)
@@ -60,6 +61,7 @@ public partial class GameManager
                             if (--timer.repeat == 0)
                             {
                                 _delList.Add(timer);
+                                timer.isCompleted = true;
                             }
                             else
                             {
@@ -82,6 +84,7 @@ public partial class GameManager
         }
     }
     
+    /// <summary> 毫秒间隔计时器 </summary>
     /// <param name="duration">持续时间（毫秒）</param>
     /// <param name="onComplete">完成事件</param>
     /// <param name="onSchedule">每次更新事件，剩余时间</param>
@@ -101,6 +104,7 @@ public partial class GameManager
         timer.delay = delay;
         timer.delayRemain = delay;
         timer.delayOnce = delayOnce;
+        timer.isCompleted = false;
         _addList.Add(timer);
         return timer.GetHashCode();
     }
@@ -126,14 +130,16 @@ public partial class GameManager
     {
         if (_scheduleList.ContainsKey(timerIdentifier))
         {
-            _delList.Add(_scheduleList[timerIdentifier]);
+            Timer unscheduleTimer = _scheduleList[timerIdentifier];
+            unscheduleTimer.isCompleted = true;
+            _delList.Add(unscheduleTimer);
         }
     }
 
     private class Timer
     {
         public int beginAt, finishAt, elapsed, duration, repeat, interval, delayRemain, delay;
-        public bool delayOnce;
+        public bool delayOnce, isCompleted;
         public Action<int> onSchedule;
         public Action onComplete;
 
