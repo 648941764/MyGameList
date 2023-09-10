@@ -3,8 +3,6 @@ using Excalibur.Physical;
 
 public class PickupBucket : Character, IPhysicalObject
 {
-
-
     private PhysicalComponent _physicalComp;
     public PhysicalComponent PhysicalComponent => _physicalComp;
 
@@ -20,6 +18,6 @@ public class PickupBucket : Character, IPhysicalObject
 
     public void OnCollisionWith(PhysicalComponent other)
     {
-        throw new System.NotImplementedException();
+
     }
 }
