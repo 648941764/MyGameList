@@ -9,8 +9,8 @@ public partial class GameManager
     private readonly List<Timer> _addList = new List<Timer>();
     private readonly List<Timer> _delList = new List<Timer>();
 
-    private const float ONE_MILLI_SEC = 0.001f;
-    private const int ONE_SEC = 1;
+    private const float ONE_MILLI_SEC_F = 0.001f; // 相对秒的1毫秒
+    private const int ONE_MILLI_SEC = 1; // 1毫秒
 
     /// <summary> 游戏时间, 毫秒，从APP第一运行开始记录，会保存 /// </summary>
     private int _gameTime;
@@ -40,10 +40,10 @@ public partial class GameManager
         }
 
         _elapsed += Time.deltaTime;
-        while (_elapsed >= ONE_MILLI_SEC) // 1毫秒
+        while (_elapsed >= ONE_MILLI_SEC_F) // 1毫秒
         {
-            _elapsed -= ONE_MILLI_SEC;
-            _gameTime += ONE_SEC;
+            _elapsed -= ONE_MILLI_SEC_F;
+            _gameTime += ONE_MILLI_SEC;
             if (_scheduleList.Count > 0)
             {
                 foreach (Timer timer in _scheduleList.Values)
@@ -71,11 +71,11 @@ public partial class GameManager
                             }
                             continue;
                         }
-                        timer.elapsed += ONE_SEC;
+                        timer.elapsed += ONE_MILLI_SEC;
                     }
                     else
                     {
-                        timer.delayRemain -= ONE_SEC;
+                        timer.delayRemain -= ONE_MILLI_SEC;
                     }
                 }
             }
