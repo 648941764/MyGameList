@@ -18,49 +18,49 @@ public class Apple : Character, IPhysicalObject
     public void OnCollisionWith(PhysicalComponent other)
     {
     }
-}
 
-public static class ApplePool
-{
-    private static Apple _prefab;
-    private static Transform _appleParent;
-    private static readonly ObjectPool<Apple> _apllePool = new ObjectPool<Apple>(
-        200,
-        default,
-        _ => _.gameObject.SetActive(false),
-        _ => Object.Destroy(_.gameObject)
-        );
-
-    private static Transform appleParent
+    private static class ApplePool
     {
-        get
+        private static Apple _prefab;
+        private static Transform _appleParent;
+        private static readonly ObjectPool<Apple> _apllePool = new ObjectPool<Apple>(
+            200,
+            default,
+            _ => _.gameObject.SetActive(false),
+            _ => Object.Destroy(_.gameObject)
+            );
+
+        private static Transform appleParent
         {
-            if (_appleParent == null)
+            get
             {
-                _appleParent = GameObject.Find("Apples").transform;
+                if (_appleParent == null)
+                {
+                    _appleParent = GameObject.Find("Apples").transform;
+                }
+                return _appleParent;
             }
-            return _appleParent;
         }
-    }
 
-    public static Apple GetApple()
-    {
-        Apple apple;
-        if (_apllePool.currentCount == 0)
+        public static Apple GetApple()
         {
-            if (_prefab == null)
+            Apple apple;
+            if (_apllePool.currentCount == 0)
             {
-                _prefab = Resources.Load<Apple>("Prefab/Pickup/Apple");
+                if (_prefab == null)
+                {
+                    _prefab = Resources.Load<Apple>("Prefab/Pickup/Apple");
+                }
+                apple = Object.Instantiate(_prefab, appleParent);
+                return apple;
             }
-            apple = Object.Instantiate(_prefab, appleParent);
+            apple = _apllePool.Get();
             return apple;
         }
-        apple = _apllePool.Get();
-        return apple;
-    }
 
-    public static void ReleaseApple(Apple apple)
-    {
-        _apllePool.Release(apple);
+        public static void ReleaseApple(Apple apple)
+        {
+            _apllePool.Release(apple);
+        }
     }
 }

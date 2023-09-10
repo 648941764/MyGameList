@@ -42,20 +42,26 @@ public class PickupBucketData
     public void UpState(int score)
     {
         int i = -1;
+        int stage = _stage;
         if (score <= StageScroe[StageScroe.Length - 1])
         {
             while (++i < StageScroe.Length)
             {
                 if (score - StageScroe[i] <= 0)
                 {
-                    _stage = i;
+                    stage = i;
                     break;
                 }
             }
         }
         else
         {
-            ++_stage;
+            ++stage;
+        }
+        if (stage != _stage)
+        {
+            _stage = stage;
+            EventManager.Instance.Broadcast(ParamPool.Get(EventName.PickupGameStageChange));
         }
     }
 

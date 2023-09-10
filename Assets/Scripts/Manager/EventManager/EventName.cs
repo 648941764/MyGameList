@@ -6,5 +6,7 @@ public enum EventName
     KeyInput,
     KeyUpInput,
 
+    PickupGameStageChange,
+
     All,
 }

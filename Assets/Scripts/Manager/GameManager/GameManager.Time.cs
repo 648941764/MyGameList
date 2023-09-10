@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public partial class GameManager
 {
-    private readonly Dictionary<int, Timer> _scheduleList = new Dictionary<int, Timer>();;
+    private readonly Dictionary<int, Timer> _scheduleList = new Dictionary<int, Timer>();
     private readonly List<Timer> _addList = new List<Timer>();
     private readonly List<Timer> _delList = new List<Timer>();
 
@@ -85,7 +85,7 @@ public partial class GameManager
     /// <param name="duration">持续时间（毫秒）</param>
     /// <param name="onComplete">完成事件</param>
     /// <param name="onSchedule">每次更新事件，剩余时间</param>
-    /// <param name="repeat">重复次数</param>
+    /// <param name="repeat">重复次数, <= 0为无限重复</param>
     /// <param name="delay">推迟时间（毫秒）</param>
     /// <param name="interval">更新间隔（毫秒）</param>
     public int Schedule(int duration, Action onComplete = default, Action<int> onSchedule = default, int repeat = 1, int interval = 1, int delay = 0, bool delayOnce = true)
@@ -115,6 +115,11 @@ public partial class GameManager
     public int Schedule(float duration, Action onComplete = default, Action<int> onSchedule = default, int repeat = 1)
     {
         return Schedule((int)(duration * 1000f), onComplete, onSchedule, repeat, 1000);
+    }
+
+    public int ScheduleOnce(Action onComplete)
+    {
+        return Schedule(1, onComplete);
     }
 
     public void Unschedule(int timerIdentifier)
