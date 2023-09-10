@@ -33,10 +33,14 @@ public class GameInitSelection : MonoBehaviour
 {
     private SelectionList selectionList;
     [SerializeField] private Transform _selectionParent;
+    [SerializeField] private GameObject _gameList;
+    [SerializeField] private GameObject _gameSetting;
 
     private void Awake()
     {
         InitSelections();
+        _gameList.SetActive(false);
+        _gameSetting.SetActive(false);
     }
 
     private void InitSelections()
@@ -44,11 +48,25 @@ public class GameInitSelection : MonoBehaviour
         selectionList = new SelectionList(_selectionParent);
 
         InitSelectionUI choose = new InitSelectionUI();
-        choose.Instantiate(new SelectionData() { title = "选择游戏", titleColor = new Color(0f, 1f, 0f), onSelectedAction = () => Debug.Log("打开选择游戏界面") });
+        choose.Instantiate(new SelectionData()
+        {
+            title = "选择游戏", titleColor = new Color(0f, 1f, 0f), onSelectedAction = () =>
+            {
+                Debug.Log("打开选择游戏界面");
+                _gameList.SetActive(true);
+                transform.gameObject.SetActive(false);
+            }
+        });
         selectionList.AddSelection(choose);
 
         InitSelectionUI setting = new InitSelectionUI();
-        setting.Instantiate(new SelectionData() { title = "设置", onSelectedAction = () => Debug.Log("打开选择设置界面") });
+        setting.Instantiate(new SelectionData() { title = "设置", onSelectedAction = () =>
+            { 
+                Debug.Log("打开选择设置界面");
+                transform.gameObject.SetActive(false);
+                _gameSetting.SetActive(true);
+            }
+        });
         selectionList.AddSelection(setting);
 
         InitSelectionUI quit = new InitSelectionUI();
