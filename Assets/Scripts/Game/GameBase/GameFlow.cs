@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// 游戏流程基类，都不要去实现Update
+/// </summary>
 public abstract class GameFlow : MonoBehaviour
 {
     private readonly HashSet<EventHandler> _enrolledHanders = new HashSet<EventHandler>();
