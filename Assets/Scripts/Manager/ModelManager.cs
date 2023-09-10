@@ -34,9 +34,9 @@ public class ModelManager : Singleton<ModelManager>, IPersistent
         _models.Remove(type);
     }
 
-    public T GetModel<T>(GameModel model) where T : GameModel
+    public T GetModel<T>() where T : GameModel
     {
-        return (T)_models[model.GetType()];
+        return (T)_models[typeof(T)];
     }
 
     public void Load(JObject jsonObject)

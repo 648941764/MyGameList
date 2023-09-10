@@ -3,6 +3,8 @@ using UnityEngine;
 
 public sealed class PickupPlayer : Character, IPhysicalObject
 {
+    [SerializeField] private SpriteRenderer[] _lifes;
+
     private PhysicalComponent physicalComp;
     public PhysicalComponent PhysicalComponent => physicalComp;
 

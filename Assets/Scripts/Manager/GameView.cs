@@ -4,29 +4,36 @@ using Excalibur.Physical;
 public class GameView : Singleton<GameView>
 {
     private Box _viewBox;
-    private Vector2 _view;
 
     public void ConstructView()
     {
         _viewBox = new Box();
         Transform trans = Camera.main.transform;
         _viewBox.UpdateCenter(trans.position);
-        //_view.y = mainCam.orthographicSize;
-        //_view.x = Screen.width / Screen.height * _view.y;
-    }
+        Vector2 view;
+        view.y = Camera.main.orthographicSize;
+        view.x = Screen.width / Screen.height * view.y;
+        _viewBox.UpdateExtents(view);
+}
 
     public bool IsInSight(Vector2 position)
     {
-        return IsInSightX(position.x) && IsInSightY(position.y);
+        return _viewBox.ContainsPoint2D(position);
     }
 
-    public bool IsInSightX(float posX)
+    public Vector3 GetViewCenter() => _viewBox.center;
+
+    /// <returns>元组结构</returns>
+    public (float, float) GetRangeHorizontal()
     {
-        return Mathf.Abs(posX) <= _view.x;
+        float half = _viewBox.extents.x / 2f;
+        return (-half, half);
     }
 
-    public bool IsInSightY(float posY)
+    /// <returns>元组结构</returns>
+    public (float, float) GetRangeVertical()
     {
-        return Mathf.Abs(posY) <= _view.y;
+        float half = _viewBox.extents.y / 2f;
+        return (-half, half);
     }
 }

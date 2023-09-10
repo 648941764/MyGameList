@@ -13,8 +13,8 @@ public abstract class GameFlow : MonoBehaviour
     protected virtual void OnEnable() { EnrollEvents(); }
     protected virtual void OnDisable() { UnenrollEvents(); }
     protected virtual void OnDestroy() { _enrolledHanders.Clear(); }
-    protected virtual void OnGameStart() { }
-    protected virtual void OnGameEnd() { }
+    public virtual void OnGameStart() { }
+    public virtual void OnGameEnd() { }
     public virtual void GameUpdate(float dt) { }
 
     #region Events，需要再Awake里面进行监听

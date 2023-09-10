@@ -6,14 +6,15 @@ public class PickupModel : GameModel
 {
     private const string
         CURRENT_KEY = "PickupCurrent",
-        HIGHEST_KEY  = "PickupHigh";
+        HIGHEST_KEY = "PickupHigh";
 
     private int _currentScore, _highestScore;
+    PickupBucketData _bucketData = new PickupBucketData();
 
     public int CurrentScore => _currentScore;
     public int HighestScore => _highestScore;
-
-    PickupBucketData _bucketData = new PickupBucketData();
+    public float BucketSpeed => _bucketData.Speed;
+    public float ThrowInterval => _bucketData.Interval;
 
     public override string GetSceneName()
     {
@@ -29,8 +30,7 @@ public class PickupModel : GameModel
         }
         _bucketData.UpState(_currentScore);
     }
-
-    public void ResetScore() => _currentScore = 0;
+    public void ResetScore() { _currentScore = 0; _bucketData.Reset(); }
     public void ResetAllScore() { _currentScore = 0; _highestScore = 0; }
 
     public override void Save(JObject jsonObject)

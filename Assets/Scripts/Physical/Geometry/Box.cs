@@ -12,6 +12,10 @@ namespace Excalibur.Physical
 
         public BoxShape _box;
 
+        public Vector3 center => _box.center;
+        public Vector3 extents => _box.extents;
+        public Quaternion rotation => _box.rotation;
+
         public void UpdateCenter(Vector3 center)
         {
             _box.center = center;

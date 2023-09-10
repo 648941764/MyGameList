@@ -23,6 +23,12 @@ namespace Excalibur.Physical
             set { _transform.position = value; _shape.UpdateCenter(value); }
         }
 
+        public Vector3 localScale
+        {
+            get => _transform.localScale;
+            set { _transform.localScale = value; _shape.UpdateExtents(value); }
+        }
+
         public Quaternion rotation
         {
             get => _transform.rotation;
@@ -34,6 +40,9 @@ namespace Excalibur.Physical
             get => _transform.localPosition;
             set { _transform.localPosition = value; _shape.UpdateCenter(value); }
         }
+
+        public Vector2 GetVertex2D(int index) => _shape.GetVertex2D(index);
+        public Vector2 GetVertex3D(int index) => _shape.GetVertex3D(index);
 
         public bool HitPoint(Vector2 point)
         {

@@ -38,4 +38,14 @@ public class CharacterManager : Singleton<CharacterManager>
             _characters[_current].GameUpdate(dt);
         }
     }
+
+    public void Add(Character character)
+    {
+        _addList.Add(character);
+    }
+
+    public void Del(Character character)
+    {
+        _addList.Add(character);
+    }
 }

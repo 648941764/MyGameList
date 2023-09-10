@@ -22,6 +22,7 @@ public class Apple : Character, IPhysicalObject
 
 public static class ApplePool
 {
+    private static Apple _prefab;
     private static Transform _appleParent;
     private static readonly ObjectPool<Apple> _apllePool = new ObjectPool<Apple>(
         200,
@@ -47,7 +48,12 @@ public static class ApplePool
         Apple apple;
         if (_apllePool.currentCount == 0)
         {
-            apple = UnityEngine.Object.Instantiate(UnityEngine.Resources.Load<Apple>("Prefab/Pickup/Apple"), appleParent);
+            if (_prefab == null)
+            {
+                _prefab = Resources.Load<Apple>("Prefab/Pickup/Apple");
+            }
+            apple = Object.Instantiate(_prefab, appleParent);
+            return apple;
         }
         apple = _apllePool.Get();
         return apple;
