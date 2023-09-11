@@ -9,7 +9,6 @@ public class Apple : Character, IPhysicalObject
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
     private PhysicalComponent _physicalComp;
-    private float _startAngle;
     private float _upTimer = 0f;
     /// <summary> 向右为true，向左为负 </summary>
     private bool _moveDir;
@@ -54,17 +53,16 @@ public class Apple : Character, IPhysicalObject
         _upTimer += dt;
         if (_upTimer <= _upTime)
         {
-            float upDis = Mathf.Abs(Mathf.Lerp(_startAngle, 0, _upTimer / _upTime) * dt * 0.1f);
-            _physicalComp.position += Vector3.up * upDis;
+            _physicalComp.position += Vector3.up * _upTimer * dt;
         }
         else
         {
             _physicalComp.position -= new Vector3(0f, _data.Speed * dt, 0f);
             if (!GameView.Instance.IsInSight(_physicalComp.GetVertex2D(0)))
             {
+                ApplePool.ReleaseApple(this);
                 // 掉出屏幕外，扣Player血量
                 Broadcast(ParamPool.Get(EventName.PickupAppleEscape));
-                ApplePool.ReleaseApple(this);
             }
         }
     }
@@ -78,13 +76,11 @@ public class Apple : Character, IPhysicalObject
         }
     }
 
-    public void Throw(Vector3 throwPos, float angle)
+    public void Throw(Vector3 throwPos)
     {
         _data = new AppleData();
         _spriteRenderer.color = _data.Color;
         _physicalComp.position = throwPos;
-        _startAngle = angle;
-        _moveDir = Mathf.Sign(angle) == 1;
         _upTimer = 0f;
         Begin();
     }
@@ -132,7 +128,10 @@ public class Apple : Character, IPhysicalObject
 
         public static void ReleaseApple(Apple apple)
         {
-            apple.Over();
+            if (apple.gameObject.activeSelf)
+            {
+                apple.Over();
+            }
             _apllePool.Release(apple);
         }
     }

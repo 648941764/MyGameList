@@ -58,6 +58,7 @@ public sealed class PickupPlayer : Character, IPhysicalObject
     public override void Over()
     {
         base.Over();
+
         PhysicalManager.Instance.Del(this);
     }
 

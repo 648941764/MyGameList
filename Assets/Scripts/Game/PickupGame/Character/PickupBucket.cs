@@ -68,9 +68,8 @@ public class PickupBucket : Character
 
     private void _ThrowApple()
     {
-        // 扔出的角度是相对于Vecter3.up的角度，与Bucket的移动方向相反
         Apple apple = Apple.ApplePool.GetApple();
-        apple.Throw(_throwPoint.position, -Mathf.Sign(_moveEquation.k) * Random.Range(THROW_MIN_ANGLE, THROW_MAX_ANGLE));
+        apple.Throw(_throwPoint.position);
         _ScheduleThrow();
     }
 
@@ -102,6 +101,6 @@ public class PickupBucket : Character
         GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
         int duration = Random.Range(_model.ThrowInterval / 2, _model.ThrowInterval);
         _throwAppleTimerIdentifier = 
-            GameManager.Instance.Schedule(duration, _ThrowApple, default, 0);
+            GameManager.Instance.Schedule(duration, _ThrowApple, default, -1);
     }
 }

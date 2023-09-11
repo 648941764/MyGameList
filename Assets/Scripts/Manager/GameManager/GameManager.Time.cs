@@ -58,10 +58,13 @@ public partial class GameManager
                         if (timer.elapsed == timer.duration)
                         {
                             timer.onComplete?.Invoke();
-                            if (--timer.repeat == 0)
+                            if (timer.repeat > 0)
                             {
-                                _delList.Add(timer);
-                                timer.isCompleted = true;
+                                if (--timer.repeat == 0)
+                                {
+                                    _delList.Add(timer);
+                                    timer.isCompleted = true;
+                                }
                             }
                             else
                             {
@@ -88,11 +91,15 @@ public partial class GameManager
     /// <param name="duration">持续时间（毫秒）</param>
     /// <param name="onComplete">完成事件</param>
     /// <param name="onSchedule">每次更新事件，剩余时间</param>
-    /// <param name="repeat">重复次数, <= 0为无限重复</param>
+    /// <param name="repeat">重复次数, < 0为无限重复</param>
     /// <param name="delay">推迟时间（毫秒）</param>
     /// <param name="interval">更新间隔（毫秒）</param>
     public int Schedule(int duration, Action onComplete = default, Action<int> onSchedule = default, int repeat = 1, int interval = 1, int delay = 0, bool delayOnce = true)
     {
+        if (repeat == 0)
+        {
+            throw new System.InvalidOperationException("Timer的repeat不能为0");
+        }
         Timer timer = TimerPool.GetTimer();
         timer.duration = duration;
         timer.beginAt = _gameTime;
