@@ -34,6 +34,13 @@ namespace Excalibur.Physical
         public bool ContainsPoint2D(Vector2 point)
         {
             return Mathf.Abs(point.x) <= _box.extents.x && Mathf.Abs(point.y) <= _box.extents.y;
+            Vector2[] corner = new Vector2[]
+            {
+                GetVertex2D(0), GetVertex2D(1), GetVertex2D(2)
+            };
+            return
+                corner[0].x <= point.x && corner[2].x >= point.x &&
+                corner[0].y <= point.y && corner[1].y >= point.y;
         }
 
         public bool ContainsPoint3D(Vector3 point)

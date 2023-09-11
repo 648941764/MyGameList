@@ -11,7 +11,7 @@ public class GameView : Singleton<GameView>
         Transform trans = Camera.main.transform;
         _viewBox.UpdateCenter(trans.position);
         Vector2 view;
-        view.y = Camera.main.orthographicSize * 2;
+        view.y = Camera.main.orthographicSize;
         view.x = (float)Screen.width / Screen.height * view.y;
         _viewBox.UpdateExtents(view);
 }
@@ -26,14 +26,14 @@ public class GameView : Singleton<GameView>
     /// <returns>元组结构</returns>
     public (float, float) GetRangeHorizontal()
     {
-        float half = _viewBox.extents.x / 2f;
+        float half = _viewBox.extents.x;
         return (-half, half);
     }
 
     /// <returns>元组结构</returns>
     public (float, float) GetRangeVertical()
     {
-        float half = _viewBox.extents.y / 2f;
+        float half = _viewBox.extents.y;
         return (-half, half);
     }
 }

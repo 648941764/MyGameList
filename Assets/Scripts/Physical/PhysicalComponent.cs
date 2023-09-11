@@ -11,7 +11,7 @@ namespace Excalibur.Physical
         {
             (_transform, _shape) = (transform, shape);
             _shape.UpdateCenter(_transform.position);
-            _shape.UpdateExtents(_transform.localScale);
+            _shape.UpdateExtents(_transform.localScale / 2f);
             _shape.UpdateRotation(Quaternion.identity);
         }
 

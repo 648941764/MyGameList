@@ -6,8 +6,8 @@ public sealed class PickupPlayer : Character, IPhysicalObject
 {
     [SerializeField] private SpriteRenderer[] _lifes;
 
-    private PhysicalComponent physicalComp;
-    public PhysicalComponent PhysicalComponent => physicalComp;
+    private PhysicalComponent _physicalComp;
+    public PhysicalComponent PhysicalComponent => _physicalComp;
 
     public string Tag => "PickupPlayer";
     private readonly HashSet<string> _collisionTags = new HashSet<string>();
@@ -17,8 +17,9 @@ public sealed class PickupPlayer : Character, IPhysicalObject
 
     protected override void Awake()
     {
-        physicalComp = new PhysicalComponent(transform, new Box());
-
+        Box bound = new Box();
+        _physicalComp = new PhysicalComponent(transform, bound);
+        bound.UpdateExtents(new Vector2(_lifes[0].transform.localScale.x, _lifes[0].transform.localScale.y * 3f) * 0.5f);
         EnrollEvents(_UpdateMove);
         EnrollEvents(_UpdatePlayerHealthUI);
     }
@@ -42,6 +43,13 @@ public sealed class PickupPlayer : Character, IPhysicalObject
         {
             _lifes[i].color = Color.green;
         }
+        Vector2 pos = GameView.Instance.GetViewCenter();
+        (float, float) xRange = GameView.Instance.GetRangeHorizontal();
+        pos.x = Random.Range(xRange.Item1, xRange.Item2);
+        (float, float) yRange = GameView.Instance.GetRangeVertical();
+        pos.x += Random.Range(xRange.Item1 * 0.8f, xRange.Item2 * 0.8f);
+        pos.y -= yRange.Item2 * 0.75f;
+        _physicalComp.position = pos;
     }
 
     public override void Over()
@@ -97,12 +105,16 @@ public sealed class PickupPlayer : Character, IPhysicalObject
     private void _UpdateMove()
     {
         float input = Input.GetAxisRaw("Horizontal");
-        Vector2 pos = physicalComp.position;
-        pos.x += input * 2f;
-        if (!GameView.Instance.IsInSight(pos))
+        Vector2 pos = _physicalComp.position;
+        pos.x += input * 0.02f;
+        if (input < 0f)
         {
-            return;
+            if (!GameView.Instance.IsInSight(_physicalComp.GetVertex2D(0) * 1.01f)) { return; }
         }
-        physicalComp.position = pos;
+        else if (input > 0f)
+        {
+            if (!GameView.Instance.IsInSight(_physicalComp.GetVertex2D(2) * 1.01f)) { return; }
+        }
+        _physicalComp.position = pos;
     }
 }
