@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
 public partial class GameManager : MonoSingleton<GameManager>
 {
@@ -10,6 +11,8 @@ public partial class GameManager : MonoSingleton<GameManager>
     {
         base.Start();
         ModelManager.Instance.InstantiateModel();
+        GameView.Instance.ConstructView();
+        SceneManager.LoadScene("Pickup", LoadSceneMode.Additive);
     }
 
     protected override void Update()

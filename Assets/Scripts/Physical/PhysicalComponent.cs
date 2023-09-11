@@ -7,8 +7,6 @@ namespace Excalibur.Physical
         private Transform _transform;
         private IGeometric _shape;
 
-        public string tag = string.Empty;
-
         public PhysicalComponent(Transform transform, IGeometric shape)
         {
             (_transform, _shape) = (transform, shape);
@@ -16,6 +14,9 @@ namespace Excalibur.Physical
             _shape.UpdateExtents(_transform.localScale);
             _shape.UpdateRotation(Quaternion.identity);
         }
+
+        public Transform transform => _transform;
+        public GameObject gameObject => transform.gameObject;
 
         public Vector3 position
         {

@@ -6,7 +6,13 @@ public enum EventName
     KeyInput,
     KeyUpInput,
 
+    /* PickupGame Begin */
+    PickupAppleEscape,
     PickupGameStageChange,
+    PickupScoreChange,
+    PickupHighestScoreChange,
+    PickupGameOver,
+    /* PickupGame End */
 
     All,
 }

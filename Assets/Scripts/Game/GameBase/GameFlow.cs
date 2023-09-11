@@ -9,12 +9,12 @@ public abstract class GameFlow : MonoBehaviour
     private readonly HashSet<EventHandler> _enrolledHanders = new HashSet<EventHandler>();
 
     protected virtual void Awake() { }
-    protected virtual void Start() { }
+    protected virtual void Start() { OnBegin(); }
     protected virtual void OnEnable() { EnrollEvents(); }
     protected virtual void OnDisable() { UnenrollEvents(); }
-    protected virtual void OnDestroy() { _enrolledHanders.Clear(); }
-    public virtual void OnGameStart() { }
-    public virtual void OnGameEnd() { }
+    protected virtual void OnDestroy() { _enrolledHanders.Clear(); OnEnd(); }
+    protected virtual void OnBegin() { }
+    protected virtual void OnEnd() { }
     public virtual void GameUpdate(float dt) { }
 
     #region Events，需要再Awake里面进行监听
@@ -43,6 +43,11 @@ public abstract class GameFlow : MonoBehaviour
                 EventManager.Instance.RemoveListener(handler);
             }
         }
+    }
+
+    protected void Broadcast(EventParam param)
+    {
+        EventManager.Instance.Broadcast(param);
     }
 
     #endregion

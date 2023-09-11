@@ -1,8 +1,13 @@
 using UnityEngine;
 using Excalibur.Physical;
 
-public class PickupBucket : Character, IPhysicalObject
+public class PickupBucket : Character
 {
+    public const float THROW_MIN_ANGLE = 30f;
+    public const float THROW_MAX_ANGLE = 60f;
+
+    [SerializeField] private Transform _throwPoint;
+
     private PhysicalComponent _physicalComp;
     private LinearEquation _moveEquation = new LinearEquation();
     private PickupModel _model;
@@ -20,13 +25,13 @@ public class PickupBucket : Character, IPhysicalObject
         EnrollEvents(_OnPickupStageChangeHandler);
     }
 
-    public override void OnGameStart()
+    protected override void OnBegin()
     {
         Vector2 pos;
         (float, float) xRange = GameView.Instance.GetRangeHorizontal();
         pos.x = Random.Range(xRange.Item1, xRange.Item2);
         (float, float) yRange = GameView.Instance.GetRangeVertical();
-        pos.y = yRange.Item2 * 0.35f;
+        pos.y = yRange.Item2 * 0.65f;
         _physicalComp.position = pos;
 
         _model = ModelManager.Instance.GetModel<PickupModel>();
@@ -34,6 +39,11 @@ public class PickupBucket : Character, IPhysicalObject
         _UpdateSpeed();
 
         _ScheduleThrow();
+    }
+
+    protected override void OnEnd()
+    {
+        GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
     }
 
     public override void GameUpdate(float dt)
@@ -48,14 +58,11 @@ public class PickupBucket : Character, IPhysicalObject
         _physicalComp.position = currentPos;
     }
 
-    public void OnCollisionWith(PhysicalComponent other)
-    {
-
-    }
-
     private void _ThrowApple()
     {
-
+        Apple apple = Apple.ApplePool.GetApple();
+        // 扔出的角度是相对于Vecter3.up的角度，与Bucket的移动方向相反
+        apple.Throw(_throwPoint.position, -Mathf.Sign(_moveEquation.k) * Random.Range(THROW_MIN_ANGLE, THROW_MAX_ANGLE));
     }
 
     private void _UpdateSpeed()
@@ -74,6 +81,7 @@ public class PickupBucket : Character, IPhysicalObject
         {
             case EventName.PickupGameStageChange:
                 {
+                    _ThrowApple();
                     _ScheduleThrow();
                 }
                 break;

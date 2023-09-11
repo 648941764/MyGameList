@@ -9,11 +9,12 @@ public class AppleData
 
     private int _apple;
 
-    public AppleData() => _apple = Random.Range(0, 3);
+    public AppleData() => RandomStage();
 
     public int Score => AppleScore[_apple];
     public float Speed => AppleSpeed[_apple];
     public Color Color => AppleColor[_apple];
+    public void RandomStage() => _apple = Random.Range(0, 3);
 }
 
 public class PickupBucketData
@@ -66,4 +67,23 @@ public class PickupBucketData
     }
 
     public void Reset() => _stage = 0;
+}
+
+public class PickupPlayerData
+{
+    public const int MAX_HEALTH = 3;
+
+    private int _current;
+    public int currentHealth => _current;
+
+    public void ResetHealth()
+    {
+        _current = MAX_HEALTH;
+    }
+
+    public void SetHealth(int health)
+    {
+        health = Mathf.Clamp(health, 0, MAX_HEALTH);
+        _current = health;
+    }
 }

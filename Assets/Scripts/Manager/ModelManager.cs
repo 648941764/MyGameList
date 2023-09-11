@@ -9,17 +9,20 @@ public class ModelManager : Singleton<ModelManager>, IPersistent
 
     public void InstantiateModel()
     {
-        AddModel(new PickupModel());
+        AddModel<PickupModel>();
     }
 
-    public void AddModel(GameModel model)
+    public void AddModel<T>() where T : GameModel, new()
     {
-        Type type = model.GetType();
+        Type type = typeof(T);
         if (_models.ContainsKey(type))
         {
             Debug.LogFormat("{0}模块已经添加", type.Name);
             return;
         }
+        T model = new T();
+        model.OnInstantiated();
+        model.OnEstablished();
         _models.Add(type, model);
     }
 

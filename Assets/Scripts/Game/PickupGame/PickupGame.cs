@@ -1,28 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickupGame : Game
 {
-    [SerializeField]
-    private Character[] _characters;
+    [SerializeField] Text _currentText;
+    [SerializeField] Text _highestText;
 
-    public override void OnGameStart()
+    protected override void Awake()
     {
-        int i = -1;
-        while (++i < _characters.Length)
+        base.Awake();
+        EnrollEvents(_ =>
         {
-            _characters[i].OnGameStart();
-        }
+            switch (_.eventName)
+            {
+                case EventName.PickupScoreChange:
+                    _currentText.text = _.Get<string>();
+                    break;
+                case EventName.PickupHighestScoreChange:
+                    _highestText.text = _.Get<string>();
+                    break;
+            }
+        });
     }
 
-    public override void OnGameEnd()
+    protected override void OnBegin()
     {
-        int i = -1;
-        while (++i < _characters.Length)
-        {
-            _characters[i].OnGameEnd();
-        }
+        base.OnBegin();
+        ModelManager.Instance.GetModel<PickupModel>().ResetScore();
     }
 }

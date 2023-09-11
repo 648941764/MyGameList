@@ -40,11 +40,11 @@ public class PhysicalManager : Singleton<PhysicalManager>
             {
                 if (_target == _current) { continue; }
                 IPhysicalObject target = _physicalComponents[_current];
-                if (current.PhysicalComponent.tag == target.PhysicalComponent.tag)
+                if (current.PhysicalComponent.HitPoint(target.PhysicalComponent.position))
                 {
-                    if (current.PhysicalComponent.HitPoint(target.PhysicalComponent.position))
+                    if (current.CollisionTags.Contains(target.Tag))
                     {
-                        current.OnCollisionWith(target.PhysicalComponent);
+                        current.OnCollisionWith(target);
                     }
                 }
             }

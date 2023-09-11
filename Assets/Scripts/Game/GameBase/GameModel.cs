@@ -19,7 +19,7 @@ public abstract class GameModel : IPersistent
 
     #region Enroll Events
 
-    public void EnrollEvents()
+    private void EnrollEvents()
     {
         if (_enrolledHanders.Count > 0)
         {
@@ -30,7 +30,7 @@ public abstract class GameModel : IPersistent
         }
     }
 
-    public void UnenrollEvents()
+    private void UnenrollEvents()
     {
         if (_enrolledHanders.Count > 0)
         {
@@ -51,10 +51,26 @@ public abstract class GameModel : IPersistent
         _enrolledHanders.Remove(handler);
     }
 
+    protected void Broadcast(EventParam param)
+    {
+        EventManager.Instance.Broadcast(param);
+    }
+
     #endregion
+
+    public virtual void OnInstantiated()
+    {
+
+    }
+
+    public virtual void OnEstablished()
+    {
+        EnrollEvents();
+    }
 
     public virtual void Dispose()
     {
+        UnenrollEvents();
         _enrolledHanders.Clear();
     }
 }

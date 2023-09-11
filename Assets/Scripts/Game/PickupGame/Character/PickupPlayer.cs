@@ -1,4 +1,5 @@
 using Excalibur.Physical;
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class PickupPlayer : Character, IPhysicalObject
@@ -8,18 +9,37 @@ public sealed class PickupPlayer : Character, IPhysicalObject
     private PhysicalComponent physicalComp;
     public PhysicalComponent PhysicalComponent => physicalComp;
 
+    public string Tag => "PickupPlayer";
+    private readonly HashSet<string> _collisionTags = new HashSet<string>();
+    public HashSet<string> CollisionTags => _collisionTags;
+
+    private float _input;
+
     protected override void Awake()
     {
         physicalComp = new PhysicalComponent(transform, new Box());
 
         EnrollEvents(_UpdateMove);
+        EnrollEvents(_UpdatePlayerHealthUI);
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        PhysicalManager.Instance.Add(this);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        PhysicalManager.Instance.Del(this);
     }
 
     public override void GameUpdate(float dt)
     {
     }
 
-    public void OnCollisionWith(PhysicalComponent other)
+    public void OnCollisionWith(IPhysicalObject other)
     {
 
     }
@@ -42,11 +62,32 @@ public sealed class PickupPlayer : Character, IPhysicalObject
         }
     }
 
+    private void _UpdatePlayerHealthUI(EventParam eventParam)
+    {
+        switch (eventParam.eventName)
+        {
+            case EventName.PickupAppleEscape:
+                {
+                    int currentHealth = ModelManager.Instance.GetModel<PickupModel>().GetPlayerHealth();
+                    int i = -1;
+                    while (++i < _lifes.Length)
+                    {
+                        _lifes[i].color = (_lifes.Length - 1 - i) < currentHealth ? Color.green : Color.red;
+                    }
+                    break;
+                }
+        }
+    }
+
     private void _UpdateMove()
     {
         float input = Input.GetAxisRaw("Horizontal");
         Vector2 pos = physicalComp.position;
-        pos.x += input;
+        pos.x += input * 2f;
+        if (!GameView.Instance.IsInSight(pos))
+        {
+            return;
+        }
         physicalComp.position = pos;
     }
 }
