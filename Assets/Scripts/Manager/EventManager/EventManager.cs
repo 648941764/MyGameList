@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using System.Diagnostics;
 
-public delegate void EventHandler(EventParam param);
+public delegate void EventHandler(EventParam param);//定义委托
 
 /// <summary> 事件处理器 /// </summary>
 public sealed class EventManager : Singleton<EventManager>
@@ -11,7 +11,7 @@ public sealed class EventManager : Singleton<EventManager>
     private EventHandler r_Handler;
     private readonly HashSet<EventHandler> r_Handlers = new HashSet<EventHandler>();
 
-    public void AddListener(EventHandler handler)
+    public void AddListener(EventHandler handler)//添加事件
     {
         if (r_Handlers.Contains(handler))
         {
@@ -22,7 +22,7 @@ public sealed class EventManager : Singleton<EventManager>
         r_Handlers.Add(handler);
     }
 
-    public void RemoveListener(EventHandler handler)
+    public void RemoveListener(EventHandler handler)//移除监听事件
     {
         if (!r_Handlers.Contains(handler))
         {

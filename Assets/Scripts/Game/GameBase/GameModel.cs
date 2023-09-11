@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-public abstract class GameModel : IPersistent
+public abstract class GameModel : IPersistent// 游戏模型的基类
 {
     private readonly HashSet<EventHandler> _enrolledHanders = new HashSet<EventHandler>();
 

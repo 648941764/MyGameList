@@ -31,7 +31,7 @@ public partial class GameManager : MonoSingleton<GameManager>
     private int _gameTime;
     private float _elapsed;
 
-    private void _UpdateTime()
+    private void _UpdateTime()//可能是跟踪游戏进行的时间
     {
         _elapsed += Time.deltaTime;
         while (_elapsed >= ONE_MILLI_SEC) // 1毫秒

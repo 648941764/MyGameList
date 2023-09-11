@@ -7,12 +7,12 @@ public class ModelManager : Singleton<ModelManager>, IPersistent
 {
     private readonly Dictionary<Type, GameModel> _models = new Dictionary<Type, GameModel>();
 
-    public void InstantiateModel()
+    public void InstantiateModel()//实例化模型
     {
         AddModel(new PickupModel());
     }
 
-    public void AddModel(GameModel model)
+    public void AddModel(GameModel model)// 添加模型
     {
         Type type = model.GetType();
         if (_models.ContainsKey(type))
