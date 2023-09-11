@@ -13,6 +13,7 @@ public partial class GameManager : MonoSingleton<GameManager>
     protected override void Start()
     {
         base.Start();
+        EventManager.Instance.AddListener(_OnGameOver);
         ModelManager.Instance.InstantiateModel();
         GameView.Instance.ConstructView();
         StartCoroutine(StartGame(ModelManager.Instance.GetModel<PickupModel>()));
@@ -63,10 +64,27 @@ public partial class GameManager : MonoSingleton<GameManager>
         _UpdateInput();
         _UpdateTime();
         CharacterManager.Instance.CharacterUpdate(dt);
+        PhysicalManager.Instance.PhysicalUpdate();
     }
 
     private void _Broadcast(EventParam param)
     {
         EventManager.Instance.Broadcast(param, false);
     }
+
+    private void _OnGameOver(EventParam param)
+    {
+        switch (param.eventName)
+        {
+            case EventName.GameOver:
+                {
+                    _currentGame.Over();
+                    break;
+                }
+        }
+    }
+
+    public void StartGame() => _currentGame.Begin();
+    public void Pause(bool pause) => _currentGame.Pause(pause);
+    public void EndGame() => _currentGame.Over();
 }

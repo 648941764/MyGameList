@@ -10,7 +10,10 @@ public sealed class PickupPlayer : Character, IPhysicalObject
     public PhysicalComponent PhysicalComponent => _physicalComp;
 
     public string Tag => "PickupPlayer";
-    private readonly HashSet<string> _collisionTags = new HashSet<string>();
+    private readonly HashSet<string> _collisionTags = new HashSet<string>()
+    {
+        "Apple"
+    };
     public HashSet<string> CollisionTags => _collisionTags;
 
     private float _input;
@@ -64,7 +67,7 @@ public sealed class PickupPlayer : Character, IPhysicalObject
 
     public void OnCollisionWith(IPhysicalObject other)
     {
-
+        other.OnCollisionWith(this);
     }
 
     private void _UpdateMove(EventParam eventParam)

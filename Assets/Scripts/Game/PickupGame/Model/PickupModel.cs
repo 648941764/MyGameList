@@ -28,7 +28,7 @@ public class PickupModel : GameModel
                         _playerData.SetHealth(_playerData.currentHealth - 1);
                         if (_playerData.currentHealth == 0)
                         {
-                            Broadcast(ParamPool.Get(EventName.PickupGameOver));
+                            Broadcast(ParamPool.Get(EventName.GameOver));
                         }
                         break;
                     }

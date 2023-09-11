@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,11 +19,15 @@ public class PickupGame : Game
             switch (_.eventName)
             {
                 case EventName.PickupScoreChange:
-                    _currentText.text = _.Get<string>();
-                    break;
+                    {
+                        _currentText.text = _.Get<string>();
+                        break;
+                    }
                 case EventName.PickupHighestScoreChange:
-                    _highestText.text = _.Get<string>();
-                    break;
+                    {
+                        _highestText.text = _.Get<string>();
+                        break;
+                    }
             }
         });
     }
@@ -36,6 +41,16 @@ public class PickupGame : Game
         while (++i < _characters.Length)
         {
             _characters[i].Begin();
+        }
+    }
+
+    public override void Over()
+    {
+        base.Over();
+        int i = -1;
+        while (++i < _characters.Length)
+        {
+            _characters[i].Over();
         }
     }
 }

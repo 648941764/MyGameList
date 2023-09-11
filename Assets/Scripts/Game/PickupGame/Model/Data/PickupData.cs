@@ -4,7 +4,7 @@ using UnityEngine;
 public class AppleData
 {
     private static int[] AppleScore = new int[] { 3, 5, 7 };
-    private static float[] AppleSpeed = new float[] { 8f, 10f, 13f };
+    private static float[] AppleSpeed = new float[] { 4f, 5f, 7f };
     private static Color[] AppleColor = new Color[] { Color.yellow, Color.cyan, Color.red };
 
     private int _apple;
@@ -27,7 +27,7 @@ public class PickupBucketData
     /// <summary> ∫¡√Î // </summary>
     private static int[] StageInterval = new int[]
     {
-        2000, 1800, 1600, 1400, 1200, 1000
+        1300, 1100, 1000, 900, 800, 700
     };
 
     private static int[] StageScroe = new int[]

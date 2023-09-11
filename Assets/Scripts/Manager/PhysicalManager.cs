@@ -1,6 +1,7 @@
 using Excalibur.Physical;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 public class PhysicalManager : Singleton<PhysicalManager>
 {
@@ -9,7 +10,7 @@ public class PhysicalManager : Singleton<PhysicalManager>
     private readonly List<IPhysicalObject> _delList = new List<IPhysicalObject>();
     private int _current, _target;
 
-    public void PhysicalUpdate(float dt)
+    public void PhysicalUpdate()
     {
         if (_addList.Count > 0)
         {
@@ -39,8 +40,8 @@ public class PhysicalManager : Singleton<PhysicalManager>
             while (++_target < _physicalComponents.Count)
             {
                 if (_target == _current) { continue; }
-                IPhysicalObject target = _physicalComponents[_current];
-                if (current.PhysicalComponent.HitPoint(target.PhysicalComponent.position))
+                IPhysicalObject target = _physicalComponents[_target];
+                if (current.PhysicalComponent.HitPoint2D(target.PhysicalComponent.position))
                 {
                     if (current.CollisionTags.Contains(target.Tag))
                     {
@@ -58,6 +59,6 @@ public class PhysicalManager : Singleton<PhysicalManager>
 
     public void Del(IPhysicalObject target)
     {
-        _delList.Remove(target);
+        _delList.Add(target);
     }
 }

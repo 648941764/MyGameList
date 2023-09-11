@@ -19,27 +19,23 @@ public class PickupBucket : Character
     {
         base.Awake();
         _physicalComp = new PhysicalComponent(transform, new Box());
-        Vector3 scale = _physicalComp.localScale;
-        _physicalComp.localScale = new Vector3(scale.x + 0.2f, scale.y, scale.z);
-
         EnrollEvents(_OnPickupStageChangeHandler);
     }
 
     public override void Begin()
     {
         base.Begin();
-        Vector2 pos;
+        Vector2 pos = GameView.Instance.GetViewCenter();
         (float, float) xRange = GameView.Instance.GetRangeHorizontal();
-        pos.x = Random.Range(xRange.Item1, xRange.Item2);
+        pos.x += Random.Range(xRange.Item1, xRange.Item2);
         (float, float) yRange = GameView.Instance.GetRangeVertical();
-        pos.y = yRange.Item2 * 0.65f;
+        pos.y += yRange.Item2 * 0.55f;
         _physicalComp.position = pos;
 
         _model = ModelManager.Instance.GetModel<PickupModel>();
         _moveEquation.b = pos.x;
         _UpdateSpeed();
-
-        _ScheduleThrow();
+        _ThrowApple();
     }
 
     public override void Over()
@@ -52,9 +48,19 @@ public class PickupBucket : Character
     {
         Vector2 currentPos = _physicalComp.position;
         currentPos.x = _moveEquation.Map(dt);
-        if (!GameView.Instance.IsInSight(_physicalComp.GetVertex2D(2)))
+        if (_moveEquation.k > 0)
         {
-            _ReverseDir();
+            if (!GameView.Instance.IsInSight(_physicalComp.GetVertex2D(2)))
+            {
+                _ReverseDir();
+            }
+        }
+        else if (_moveEquation.k < 0)
+        {
+            if (!GameView.Instance.IsInSight(_physicalComp.GetVertex2D(0)))
+            {
+                _ReverseDir();
+            }
         }
         _moveEquation.b = currentPos.x;
         _physicalComp.position = currentPos;
@@ -63,8 +69,9 @@ public class PickupBucket : Character
     private void _ThrowApple()
     {
         // 扔出的角度是相对于Vecter3.up的角度，与Bucket的移动方向相反
-        // Apple apple = Apple.ApplePool.GetApple();
-        // apple.Throw(_throwPoint.position, -Mathf.Sign(_moveEquation.k) * Random.Range(THROW_MIN_ANGLE, THROW_MAX_ANGLE));
+        Apple apple = Apple.ApplePool.GetApple();
+        apple.Throw(_throwPoint.position, -Mathf.Sign(_moveEquation.k) * Random.Range(THROW_MIN_ANGLE, THROW_MAX_ANGLE));
+        _ScheduleThrow();
     }
 
     private void _UpdateSpeed()
@@ -93,6 +100,8 @@ public class PickupBucket : Character
     private void _ScheduleThrow()
     {
         GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
-        _throwAppleTimerIdentifier = GameManager.Instance.Schedule(_model.ThrowInterval, _ThrowApple, default, 0);
+        int duration = Random.Range(_model.ThrowInterval / 2, _model.ThrowInterval);
+        _throwAppleTimerIdentifier = 
+            GameManager.Instance.Schedule(duration, _ThrowApple, default, 0);
     }
 }

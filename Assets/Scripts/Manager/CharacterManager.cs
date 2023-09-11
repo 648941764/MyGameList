@@ -46,6 +46,6 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public void Del(Character character)
     {
-        _addList.Add(character);
+        _delList.Add(character);
     }
 }

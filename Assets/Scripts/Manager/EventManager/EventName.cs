@@ -11,8 +11,9 @@ public enum EventName
     PickupGameStageChange,
     PickupScoreChange,
     PickupHighestScoreChange,
-    PickupGameOver,
     /* PickupGame End */
+
+    GameOver,
 
     All,
 }

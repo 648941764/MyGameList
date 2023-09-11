@@ -94,6 +94,7 @@ public partial class GameManager
     public int Schedule(int duration, Action onComplete = default, Action<int> onSchedule = default, int repeat = 1, int interval = 1, int delay = 0, bool delayOnce = true)
     {
         Timer timer = TimerPool.GetTimer();
+        timer.duration = duration;
         timer.beginAt = _gameTime;
         timer.elapsed = 0;
         timer.finishAt = _gameTime + duration;

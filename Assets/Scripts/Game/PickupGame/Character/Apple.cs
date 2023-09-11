@@ -18,26 +18,34 @@ public class Apple : Character, IPhysicalObject
     public PhysicalComponent PhysicalComponent => _physicalComp;
 
     public string Tag => "Apple";
-    private readonly HashSet<string> _collisionTags = new HashSet<string>()
-    {
-        "PickupPlayer"
-    };
+    private readonly HashSet<string> _collisionTags = new HashSet<string>();
     public HashSet<string> CollisionTags => _collisionTags;
 
     protected override void Awake()
     {
         _physicalComp = new PhysicalComponent(transform, new Box());
+        EnrollEvents(_ =>
+        {
+            switch (_.eventName)
+            {
+                case EventName.GameOver:
+                    {
+                        ApplePool.ReleaseApple(this);
+                        break;
+                    }
+            }
+        });
     }
 
-    protected override void OnEnable()
+    public override void Begin()
     {
-        base.OnEnable();
+        base.Begin();
         PhysicalManager.Instance.Add(this);
     }
 
-    protected override void OnDisable()
+    public override void Over()
     {
-        base.OnDisable();
+        base.Over();
         PhysicalManager.Instance.Del(this);
     }
 
@@ -46,8 +54,8 @@ public class Apple : Character, IPhysicalObject
         _upTimer += dt;
         if (_upTimer <= _upTime)
         {
-            float upDis = Mathf.Lerp(_startAngle, 0, _upTimer / _upTime) * dt * 0.001f;
-            _physicalComp.position += new Vector3(_moveDir ? upDis : -upDis, upDis, 0f);
+            float upDis = Mathf.Abs(Mathf.Lerp(_startAngle, 0, _upTimer / _upTime) * dt * 0.1f);
+            _physicalComp.position += Vector3.up * upDis;
         }
         else
         {
@@ -78,7 +86,7 @@ public class Apple : Character, IPhysicalObject
         _startAngle = angle;
         _moveDir = Mathf.Sign(angle) == 1;
         _upTimer = 0f;
-        gameObject.SetActive(true);
+        Begin();
     }
 
     public static class ApplePool
@@ -119,12 +127,12 @@ public class Apple : Character, IPhysicalObject
             {
                 apple = _apllePool.Get();
             }
-            apple.gameObject.SetActive(false);
             return apple;
         }
 
         public static void ReleaseApple(Apple apple)
         {
+            apple.Over();
             _apllePool.Release(apple);
         }
     }
