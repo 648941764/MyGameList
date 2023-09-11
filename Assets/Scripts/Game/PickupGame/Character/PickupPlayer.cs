@@ -26,23 +26,28 @@ public sealed class PickupPlayer : Character, IPhysicalObject
     protected override void OnEnable()
     {
         base.OnEnable();
-        PhysicalManager.Instance.Add(this);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        PhysicalManager.Instance.Del(this);
     }
 
-    public override void OnBegin()
+    public override void Begin()
     {
-        base.OnBegin();
+        base.Begin();
+        PhysicalManager.Instance.Add(this);
         int i = -1;
         while (++i < _lifes.Length)
         {
             _lifes[i].color = Color.green;
         }
+    }
+
+    public override void Over()
+    {
+        base.Over();
+        PhysicalManager.Instance.Del(this);
     }
 
     public override void GameUpdate(float dt)

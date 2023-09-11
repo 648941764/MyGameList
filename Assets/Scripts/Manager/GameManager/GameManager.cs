@@ -22,7 +22,7 @@ public partial class GameManager : MonoSingleton<GameManager>
     {
         if (_currentGame != null)
         {
-            _currentGame.OnEnd();
+            _currentGame.Over();
         }
         AsyncOperation operation;
         if (_currentScene.isLoaded)
@@ -46,7 +46,7 @@ public partial class GameManager : MonoSingleton<GameManager>
             _currentGame = gameObjects[i].transform.GetComponent<Game>();
             if (_currentGame != null)
             {
-                _currentGame.OnBegin();
+                _currentGame.Begin();
                 break;
             }
         }

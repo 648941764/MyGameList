@@ -30,7 +30,7 @@ public class ObjectPool<T> where T : new()
         if (r_Pool.Count == r_MaxCount) 
         {
             r_OnOutOfBound?.Invoke(@object);
-            return; 
+            return;
         }
         r_OnRelease?.Invoke(@object);
         r_Pool.Push(@object);

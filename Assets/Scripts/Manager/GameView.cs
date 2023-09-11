@@ -11,8 +11,8 @@ public class GameView : Singleton<GameView>
         Transform trans = Camera.main.transform;
         _viewBox.UpdateCenter(trans.position);
         Vector2 view;
-        view.y = Camera.main.orthographicSize;
-        view.x = Screen.width / Screen.height * view.y;
+        view.y = Camera.main.orthographicSize * 2;
+        view.x = (float)Screen.width / Screen.height * view.y;
         _viewBox.UpdateExtents(view);
 }
 

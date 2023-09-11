@@ -25,7 +25,7 @@ public class PickupBucket : Character
         EnrollEvents(_OnPickupStageChangeHandler);
     }
 
-    public override void OnBegin()
+    public override void Begin()
     {
         Vector2 pos;
         (float, float) xRange = GameView.Instance.GetRangeHorizontal();
@@ -41,7 +41,7 @@ public class PickupBucket : Character
         _ScheduleThrow();
     }
 
-    public override void OnEnd()
+    public override void Over()
     {
         GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
     }
@@ -60,9 +60,9 @@ public class PickupBucket : Character
 
     private void _ThrowApple()
     {
-        Apple apple = Apple.ApplePool.GetApple();
         // 扔出的角度是相对于Vecter3.up的角度，与Bucket的移动方向相反
-        apple.Throw(_throwPoint.position, -Mathf.Sign(_moveEquation.k) * Random.Range(THROW_MIN_ANGLE, THROW_MAX_ANGLE));
+        // Apple apple = Apple.ApplePool.GetApple();
+        // apple.Throw(_throwPoint.position, -Mathf.Sign(_moveEquation.k) * Random.Range(THROW_MIN_ANGLE, THROW_MAX_ANGLE));
     }
 
     private void _UpdateSpeed()

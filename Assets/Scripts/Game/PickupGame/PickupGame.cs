@@ -27,15 +27,15 @@ public class PickupGame : Game
         });
     }
 
-    public override void OnBegin()
+    public override void Begin()
     {
-        base.OnBegin();
+        base.Begin();
         ModelManager.Instance.GetModel<PickupModel>().ResetScore();
         ModelManager.Instance.GetModel<PickupModel>().ResetPlayer();
         int i = -1;
         while (++i < _characters.Length)
         {
-            _characters[i].OnBegin();
+            _characters[i].Begin();
         }
     }
 }
