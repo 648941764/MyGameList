@@ -27,7 +27,7 @@ public class PickupBucketData
     /// <summary> ∫¡√Î // </summary>
     private static int[] StageInterval = new int[]
     {
-        1500, 1300, 1200, 1000, 900, 800, 700
+        2000, 1800, 1600, 1400, 1200, 1000
     };
 
     private static int[] StageScroe = new int[]

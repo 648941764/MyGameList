@@ -25,7 +25,7 @@ public class PickupBucket : Character
         EnrollEvents(_OnPickupStageChangeHandler);
     }
 
-    protected override void OnBegin()
+    public override void OnBegin()
     {
         Vector2 pos;
         (float, float) xRange = GameView.Instance.GetRangeHorizontal();
@@ -41,7 +41,7 @@ public class PickupBucket : Character
         _ScheduleThrow();
     }
 
-    protected override void OnEnd()
+    public override void OnEnd()
     {
         GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
     }

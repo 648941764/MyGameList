@@ -8,6 +8,8 @@ public class PickupGame : Game
     [SerializeField] Text _currentText;
     [SerializeField] Text _highestText;
 
+    [SerializeField] Character[] _characters;
+
     protected override void Awake()
     {
         base.Awake();
@@ -25,9 +27,15 @@ public class PickupGame : Game
         });
     }
 
-    protected override void OnBegin()
+    public override void OnBegin()
     {
         base.OnBegin();
         ModelManager.Instance.GetModel<PickupModel>().ResetScore();
+        ModelManager.Instance.GetModel<PickupModel>().ResetPlayer();
+        int i = -1;
+        while (++i < _characters.Length)
+        {
+            _characters[i].OnBegin();
+        }
     }
 }

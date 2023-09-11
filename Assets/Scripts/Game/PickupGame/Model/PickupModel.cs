@@ -39,7 +39,7 @@ public class PickupModel : GameModel
 
     public override string GetSceneName()
     {
-        return string.Empty;
+        return "Pickup";
     }
 
     public void AddScore(AppleData apple)

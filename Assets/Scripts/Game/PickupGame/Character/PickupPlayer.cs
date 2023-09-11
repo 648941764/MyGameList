@@ -35,6 +35,16 @@ public sealed class PickupPlayer : Character, IPhysicalObject
         PhysicalManager.Instance.Del(this);
     }
 
+    public override void OnBegin()
+    {
+        base.OnBegin();
+        int i = -1;
+        while (++i < _lifes.Length)
+        {
+            _lifes[i].color = Color.green;
+        }
+    }
+
     public override void GameUpdate(float dt)
     {
     }
