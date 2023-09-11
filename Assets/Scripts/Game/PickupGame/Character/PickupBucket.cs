@@ -27,6 +27,7 @@ public class PickupBucket : Character
 
     public override void Begin()
     {
+        base.Begin();
         Vector2 pos;
         (float, float) xRange = GameView.Instance.GetRangeHorizontal();
         pos.x = Random.Range(xRange.Item1, xRange.Item2);
@@ -43,6 +44,7 @@ public class PickupBucket : Character
 
     public override void Over()
     {
+        base.Over();
         GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
     }
 
