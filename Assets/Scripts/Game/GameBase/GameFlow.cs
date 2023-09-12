@@ -15,7 +15,7 @@ public abstract class GameFlow : MonoBehaviour
     public virtual void GameUpdate(float dt) { }
 
     #region Events，需要再Awake里面进行监听
-    protected void EnrollEvents(EventHandler handler)
+    protected void EnrollEvents(EventHandler handler)//将事件处理器添加到哈希集合当中去
     {
         _enrolledHanders.Add(handler);
     }
