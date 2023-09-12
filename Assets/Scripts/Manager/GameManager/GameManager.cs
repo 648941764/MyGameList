@@ -1,15 +1,56 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
 using System;
+using UnityEngine.SceneManagement;
 
 public partial class GameManager : MonoSingleton<GameManager>
 {
     float dt;
 
+    private Game _currentGame;
+    private Scene _currentScene;
+
     protected override void Start()
     {
         base.Start();
+        EventManager.Instance.AddListener(_OnGameOver);
         ModelManager.Instance.InstantiateModel();
+        GameView.Instance.ConstructView();
+        StartCoroutine(StartGame(ModelManager.Instance.GetModel<PickupModel>()));
+    }
+
+    private IEnumerator StartGame(GameModel gameModel)
+    {
+        if (_currentGame != null)
+        {
+            _currentGame.Over();
+        }
+        AsyncOperation operation;
+        if (_currentScene.isLoaded)
+        {
+            operation = SceneManager.UnloadSceneAsync(_currentScene);
+            while (!operation.isDone)
+            {
+                yield return null;
+            }
+        }
+        operation = SceneManager.LoadSceneAsync(gameModel.GetSceneName(), LoadSceneMode.Additive);
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
+        _currentScene = SceneManager.GetSceneByName(gameModel.GetSceneName());
+        GameObject[] gameObjects = _currentScene.GetRootGameObjects();
+        int i = -1;
+        while (++i < gameObjects.Length)
+        {
+            _currentGame = gameObjects[i].transform.GetComponent<Game>();
+            if (_currentGame != null)
+            {
+                _currentGame.Begin();
+                break;
+            }
+        }
     }
 
     protected override void Update()
@@ -21,28 +62,30 @@ public partial class GameManager : MonoSingleton<GameManager>
     {
         dt = Time.deltaTime;
         _UpdateInput();
+        _UpdateTime();
         CharacterManager.Instance.CharacterUpdate(dt);
-    }
-
-    const float ONE_MILLI_SEC = 0.001f;
-    const int ONE_SEC = 1;
-
-    /// <summary> 游戏时间, 毫秒，从APP第一运行开始记录，会保存 /// </summary>
-    private int _gameTime;
-    private float _elapsed;
-
-    private void _UpdateTime()//可能是跟踪游戏进行的时间
-    {
-        _elapsed += Time.deltaTime;
-        while (_elapsed >= ONE_MILLI_SEC) // 1毫秒
-        {
-            _elapsed -= ONE_MILLI_SEC;
-            _gameTime += ONE_SEC;
-        }
+        PhysicalManager.Instance.PhysicalUpdate();
     }
 
     private void _Broadcast(EventParam param)
     {
         EventManager.Instance.Broadcast(param, false);
     }
+
+    private void _OnGameOver(EventParam param)
+    {
+        switch (param.eventName)
+        {
+            case EventName.GameOver:
+                {
+                    _currentGame.Over();
+                    Debug.Log("游戏结束");
+                    break;
+                }
+        }
+    }
+
+    public void StartGame() => _currentGame.Begin();
+    public void Pause(bool pause) => _currentGame.Pause(pause);
+    public void EndGame() => _currentGame.Over();
 }

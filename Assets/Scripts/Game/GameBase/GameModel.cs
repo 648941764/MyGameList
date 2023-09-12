@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-public abstract class GameModel : IPersistent// 游戏模型的基类
+public abstract class GameModel : IPersistent
 {
     private readonly HashSet<EventHandler> _enrolledHanders = new HashSet<EventHandler>();
 
@@ -19,7 +19,7 @@ public abstract class GameModel : IPersistent// 游戏模型的基类
 
     #region Enroll Events
 
-    public void EnrollEvents()
+    private void EnrollEvents()
     {
         if (_enrolledHanders.Count > 0)
         {
@@ -30,7 +30,7 @@ public abstract class GameModel : IPersistent// 游戏模型的基类
         }
     }
 
-    public void UnenrollEvents()
+    private void UnenrollEvents()
     {
         if (_enrolledHanders.Count > 0)
         {
@@ -51,10 +51,26 @@ public abstract class GameModel : IPersistent// 游戏模型的基类
         _enrolledHanders.Remove(handler);
     }
 
+    protected void Broadcast(EventParam param)
+    {
+        EventManager.Instance.Broadcast(param);
+    }
+
     #endregion
+
+    public virtual void OnInstantiated()
+    {
+
+    }
+
+    public virtual void OnEstablished()
+    {
+        EnrollEvents();
+    }
 
     public virtual void Dispose()
     {
+        UnenrollEvents();
         _enrolledHanders.Clear();
     }
 }

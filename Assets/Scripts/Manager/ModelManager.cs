@@ -7,19 +7,22 @@ public class ModelManager : Singleton<ModelManager>, IPersistent
 {
     private readonly Dictionary<Type, GameModel> _models = new Dictionary<Type, GameModel>();
 
-    public void InstantiateModel()//实例化模型
+    public void InstantiateModel()
     {
-        AddModel(new PickupModel());
+        AddModel<PickupModel>();
     }
 
-    public void AddModel(GameModel model)// 添加模型
+    public void AddModel<T>() where T : GameModel, new()
     {
-        Type type = model.GetType();
+        Type type = typeof(T);
         if (_models.ContainsKey(type))
         {
             Debug.LogFormat("{0}模块已经添加", type.Name);
             return;
         }
+        T model = new T();
+        model.OnInstantiated();
+        model.OnEstablished();
         _models.Add(type, model);
     }
 
@@ -34,9 +37,9 @@ public class ModelManager : Singleton<ModelManager>, IPersistent
         _models.Remove(type);
     }
 
-    public T GetModel<T>(GameModel model) where T : GameModel
+    public T GetModel<T>() where T : GameModel
     {
-        return (T)_models[model.GetType()];
+        return (T)_models[typeof(T)];
     }
 
     public void Load(JObject jsonObject)

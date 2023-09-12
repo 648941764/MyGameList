@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GoldMiner.unity
     guid: 1247a43d0c614c74e929a298e0ca52cf
+  - enabled: 1
+    path: Assets/Scenes/Pickup.unity
+    guid: cae2b576a41970645addfa629b834532
   m_configObjects: {}

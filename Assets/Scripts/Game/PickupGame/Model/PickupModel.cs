@@ -6,18 +6,40 @@ public class PickupModel : GameModel
 {
     private const string
         CURRENT_KEY = "PickupCurrent",
-        HIGHEST_KEY  = "PickupHigh";
+        HIGHEST_KEY = "PickupHigh";
 
     private int _currentScore, _highestScore;
+    PickupBucketData _bucketData = new PickupBucketData();
+    PickupPlayerData _playerData = new PickupPlayerData();
 
     public int CurrentScore => _currentScore;
     public int HighestScore => _highestScore;
+    public float BucketSpeed => _bucketData.Speed;
+    public int ThrowInterval => _bucketData.Interval;
 
-    PickupBucketData _bucketData = new PickupBucketData();
+    public override void OnEstablished()
+    {
+        EnrollEvents(_ =>
+        {
+            switch (_.eventName)
+            {
+                case EventName.PickupAppleEscape:
+                    {
+                        _playerData.SetHealth(_playerData.currentHealth - 1);
+                        if (_playerData.currentHealth == 0)
+                        {
+                            Broadcast(ParamPool.Get(EventName.GameOver));
+                        }
+                        break;
+                    }
+            }
+        });
+        base.OnEstablished();
+    }
 
     public override string GetSceneName()
     {
-        return string.Empty;
+        return "Pickup";
     }
 
     public void AddScore(AppleData apple)
@@ -26,12 +48,33 @@ public class PickupModel : GameModel
         if (_currentScore >= _highestScore)
         {
             _highestScore = _currentScore;
+            Broadcast(ParamPool.Get(EventName.PickupHighestScoreChange).Push(_highestScore.ToString()));
         }
         _bucketData.UpState(_currentScore);
+        Broadcast(ParamPool.Get(EventName.PickupScoreChange).Push(_currentScore.ToString()));
+    }
+    public void ResetScore() 
+    {
+        _currentScore = 0; _bucketData.Reset();
+        Broadcast(ParamPool.Get(EventName.PickupHighestScoreChange).Push(_highestScore.ToString()));
+        Broadcast(ParamPool.Get(EventName.PickupScoreChange).Push(_currentScore.ToString()));
+    }
+    public void ResetAllScore() 
+    {
+        _currentScore = 0; _highestScore = 0;
+        Broadcast(ParamPool.Get(EventName.PickupHighestScoreChange).Push(_highestScore.ToString()));
+        Broadcast(ParamPool.Get(EventName.PickupScoreChange).Push(_currentScore.ToString()));
     }
 
-    public void ResetScore() => _currentScore = 0;
-    public void ResetAllScore() { _currentScore = 0; _highestScore = 0; }
+    public void ResetPlayer()
+    {
+        _playerData.SetHealth(PickupPlayerData.MAX_HEALTH);
+    }
+
+    public int GetPlayerHealth() 
+    {
+        return _playerData.currentHealth;
+    }
 
     public override void Save(JObject jsonObject)
     {

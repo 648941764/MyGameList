@@ -12,6 +12,10 @@ namespace Excalibur.Physical
 
         public BoxShape _box;
 
+        public Vector3 center => _box.center;
+        public Vector3 extents => _box.extents;
+        public Quaternion rotation => _box.rotation;
+
         public void UpdateCenter(Vector3 center)
         {
             _box.center = center;
@@ -29,6 +33,13 @@ namespace Excalibur.Physical
 
         public bool ContainsPoint2D(Vector2 point)
         {
+            Vector2[] corner = new Vector2[]
+            {
+                GetVertex2D(0), GetVertex2D(1), GetVertex2D(2)
+            };
+            return
+                corner[0].x <= point.x && corner[2].x >= point.x &&
+                corner[0].y <= point.y && corner[1].y >= point.y;
             return Mathf.Abs(point.x) <= _box.extents.x && Mathf.Abs(point.y) <= _box.extents.y;
         }
 
