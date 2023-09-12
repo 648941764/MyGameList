@@ -48,7 +48,6 @@ public sealed class PickupPlayer : Character, IPhysicalObject
         }
         Vector2 pos = GameView.Instance.GetViewCenter();
         (float, float) xRange = GameView.Instance.GetRangeHorizontal();
-        pos.x = Random.Range(xRange.Item1, xRange.Item2);
         (float, float) yRange = GameView.Instance.GetRangeVertical();
         pos.x += Random.Range(xRange.Item1 * 0.8f, xRange.Item2 * 0.8f);
         pos.y -= yRange.Item2 * 0.75f;

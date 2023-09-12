@@ -63,6 +63,7 @@ public class Apple : Character, IPhysicalObject
                 ApplePool.ReleaseApple(this);
                 // 掉出屏幕外，扣Player血量
                 Broadcast(ParamPool.Get(EventName.PickupAppleEscape));
+                Debug.Log("Apple掉出屏幕外");
             }
         }
     }
@@ -73,6 +74,7 @@ public class Apple : Character, IPhysicalObject
         {
             ModelManager.Instance.GetModel<PickupModel>().AddScore(_data);
             ApplePool.ReleaseApple(this);
+            Debug.Log("Apple被捡到");
         }
     }
 
@@ -81,7 +83,7 @@ public class Apple : Character, IPhysicalObject
         _data = new AppleData();
         _spriteRenderer.color = _data.Color;
         _physicalComp.position = throwPos;
-        _upTimer = 0f;
+        _upTimer = 0f; 
         Begin();
     }
 
@@ -123,6 +125,7 @@ public class Apple : Character, IPhysicalObject
             {
                 apple = _apllePool.Get();
             }
+            Debug.Log("从对象池拿苹果");
             return apple;
         }
 
@@ -132,6 +135,7 @@ public class Apple : Character, IPhysicalObject
             {
                 apple.Over();
             }
+            Debug.Log("苹果被回收");
             _apllePool.Release(apple);
         }
     }

@@ -100,7 +100,6 @@ public class PickupBucket : Character
     {
         GameManager.Instance.Unschedule(_throwAppleTimerIdentifier);
         int duration = Random.Range(_model.ThrowInterval / 2, _model.ThrowInterval);
-        _throwAppleTimerIdentifier = 
-            GameManager.Instance.Schedule(duration, _ThrowApple, default, -1);
+        _throwAppleTimerIdentifier = GameManager.Instance.Schedule(duration, _ThrowApple, default, -1);
     }
 }

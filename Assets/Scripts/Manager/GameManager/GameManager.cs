@@ -79,6 +79,7 @@ public partial class GameManager : MonoSingleton<GameManager>
             case EventName.GameOver:
                 {
                     _currentGame.Over();
+                    Debug.Log("ÓÎÏ·½áÊø");
                     break;
                 }
         }
