@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// 游戏流程基类，都不要去实现Update
-/// </summary>
 public abstract class GameFlow : MonoBehaviour
 {
     private readonly HashSet<EventHandler> _enrolledHanders = new HashSet<EventHandler>();
@@ -13,9 +10,8 @@ public abstract class GameFlow : MonoBehaviour
     protected virtual void OnEnable() { EnrollEvents(); }
     protected virtual void OnDisable() { UnenrollEvents(); }
     protected virtual void OnDestroy() { _enrolledHanders.Clear(); }
-    public virtual void Begin() { }
-    public virtual void Pause(bool pause) { }
-    public virtual void Over() { }
+    protected virtual void OnGameStart() { }
+    protected virtual void OnGameEnd() { }
     public virtual void GameUpdate(float dt) { }
 
     #region Events，需要再Awake里面进行监听
@@ -44,11 +40,6 @@ public abstract class GameFlow : MonoBehaviour
                 EventManager.Instance.RemoveListener(handler);
             }
         }
-    }
-
-    protected void Broadcast(EventParam param)
-    {
-        EventManager.Instance.Broadcast(param);
     }
 
     #endregion

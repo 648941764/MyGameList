@@ -19,7 +19,7 @@ public abstract class GameModel : IPersistent// 游戏模型的基类
 
     #region Enroll Events
 
-    private void EnrollEvents()
+    public void EnrollEvents()
     {
         if (_enrolledHanders.Count > 0)
         {
@@ -30,7 +30,7 @@ public abstract class GameModel : IPersistent// 游戏模型的基类
         }
     }
 
-    private void UnenrollEvents()
+    public void UnenrollEvents()
     {
         if (_enrolledHanders.Count > 0)
         {
@@ -51,26 +51,10 @@ public abstract class GameModel : IPersistent// 游戏模型的基类
         _enrolledHanders.Remove(handler);
     }
 
-    protected void Broadcast(EventParam param)
-    {
-        EventManager.Instance.Broadcast(param);
-    }
-
     #endregion
-
-    public virtual void OnInstantiated()
-    {
-
-    }
-
-    public virtual void OnEstablished()
-    {
-        EnrollEvents();
-    }
 
     public virtual void Dispose()
     {
-        UnenrollEvents();
         _enrolledHanders.Clear();
     }
 }
